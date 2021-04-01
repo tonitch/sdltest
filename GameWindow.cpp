@@ -8,13 +8,13 @@ int GameWindow::SendError(const char* type){
 	return 1;
 }
 
-int GameWindow::HandleEvents(bool events(SDL_Window* win, SDL_Renderer* ren)){
+int GameWindow::HandleEvents(bool events(GameWindow* GW)){
 	while(SDL_PollEvent(&e)){
 		if(e.type == SDL_QUIT){
 			QuitWindow();
 			return 1;
 		}
-		events(win, ren);
+		events(this);
 	}
 	return 0;
 }
@@ -45,14 +45,14 @@ int GameWindow::InitWindow(const char* title ,int nwidth, int nheight){
 	return 0;
 }
 
-void GameWindow::runWindow(bool sequence(SDL_Window* win, SDL_Renderer* ren), bool events(SDL_Window* win, SDL_Renderer* ren)){
+void GameWindow::runWindow(bool sequence(GameWindow* GW), bool events(GameWindow* GW)){
 	while(!quit){
 		SDL_SetRenderDrawColor(ren, red, green, blue ,alpha);
 		SDL_RenderClear(ren);
 
 		HandleEvents(events);
 		
-		sequence(win, ren);
+		sequence(this);
 
 		SDL_RenderPresent(ren);
 	}
@@ -71,4 +71,20 @@ void GameWindow::setBackgroundColor(Uint8 nred, Uint8 ngreen, Uint8 nblue, Uint8
 	green = ngreen;
 	blue = nblue;
 	alpha = nalpha;
+}
+
+SDL_Window* GameWindow::getWindow(){
+	return win;
+}
+
+SDL_Renderer* GameWindow::getRenderer(){
+	return ren;
+}
+
+int GameWindow::getWidth(){
+	return width;
+}
+
+int GameWindow::getHeight(){
+	return height;
 }

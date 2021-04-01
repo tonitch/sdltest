@@ -21,15 +21,21 @@ class GameWindow
 		SDL_Event e;
 
 		int SendError(const char* type);
-		int HandleEvents(bool events(SDL_Window* win, SDL_Renderer* ren)); 
+		int HandleEvents(bool events(GameWindow* GW)); 
 
 
 	public:
 		int InitWindow(const char* title, int width, int height);
-		void runWindow(bool sequence(SDL_Window* win, SDL_Renderer* ren), bool events(SDL_Window* win, SDL_Renderer* ren));
+		void runWindow(bool sequence(GameWindow* GW), bool events(GameWindow* GM));
 		void QuitWindow();
 
 		void setBackgroundColor(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+		
+		SDL_Window* getWindow();
+		SDL_Renderer* getRenderer();
+
+		int getWidth();
+		int getHeight();
 };
 
 #endif
