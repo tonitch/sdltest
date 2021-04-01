@@ -36,6 +36,7 @@ class GameWindow
 
 		int getWidth();
 		int getHeight();
+		SDL_Event getEvent();
 };
 
 #endif

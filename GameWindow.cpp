@@ -88,3 +88,7 @@ int GameWindow::getWidth(){
 int GameWindow::getHeight(){
 	return height;
 }
+
+SDL_Event GameWindow::getEvent(){
+	return e;
+}
