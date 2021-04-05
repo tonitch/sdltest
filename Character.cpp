@@ -1,45 +1,70 @@
 #include "Character.hpp"
+#include <iostream>
+#include <math.h>
 
-Character::Character(SDL_Renderer* iren){
+void Character::init(SDL_Renderer* iren){
 	ren = iren;
-	x = 0;
-	y = 0; 
+	position = Vector2(400,400);
 	w = 50;
 	h = 50;
+	speed = 10;
 }
-
+Character::Character(SDL_Renderer* iren){
+	init(iren);
+}
 Character::Character(SDL_Renderer* iren, const char* fileavatar){
-	ren = iren;
+	init(iren);
 	avatar = IMG_LoadTexture(ren, fileavatar);
-	x = 0;
-	y = 0; 
 }
 
 void Character::render(){
-	//TODO
+
+	direction.Normalize();
+	updateVelocity();
+	updatePosition();
+
+	SDL_Rect playerRect = getPlayerRect();
+	if(avatar){
+		SDL_RenderCopy(ren, avatar, NULL, &playerRect);
+	}else{
+		SDL_SetRenderDrawColor(ren, 255,0,0,255);
+		SDL_RenderFillRect(ren, &playerRect);
+	}
 }
 
 
 void Character::keyIO(SDL_Event* e){
-	switch (e->key.keysym.sym){
-		case SDLK_z:
-			moveUp(10);
-		case SDLK_q:
-			moveLeft(10);
-		case SDLK_s:
-			moveDown(10);
-		case SDLK_d:
-			moveRight(10);
+	if(e->type == SDL_KEYDOWN){
+		switch (e->key.keysym.sym){
+			case SDLK_z:
+				moveUp();
+				break;
+			case SDLK_q:
+				moveLeft();
+				break;
+			case SDLK_s:
+				moveDown();
+				break;
+			case SDLK_d:
+				moveRight();
+				break;
+		}
+	}else if(e->type == SDL_KEYUP){
+		direction = Vector2();
 	}
 }
 
-void Character::render(){
-	return;
+void Character::moveUp(){direction.y = direction.y = -1;};
+void Character::moveDown(){direction.y = direction.y = 1;};
+void Character::moveLeft(){direction.x = direction.x = -1;};
+void Character::moveRight(){direction.x = direction.x = 1;};
+
+void Character::updateVelocity(){
+	velocity = direction.mult(Vector2(speed, speed));
 }
 
-void Character::moveUp(int dist){x--;}
-void Character::moveDown(int dist){x++;}
-void Character::moveRight(int dist){y++;}
-void Character::moveLeft(int dist){y--;}
+void Character::updatePosition(){
+	position = position.add(velocity);
+}
 
-SDL_Rect Character::getPlayerRect(){ return {x, y, w, h};}
+SDL_Rect Character::getPlayerRect(){ return {position.x, position.y, w, h};}

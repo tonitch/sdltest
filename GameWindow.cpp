@@ -27,6 +27,11 @@ int GameWindow::InitWindow(const char* title ,int nwidth, int nheight){
 	if(SDL_Init(SDL_INIT_VIDEO)){
 		return SendError("Init");
 	}
+
+	if(TTF_Init()){
+		std::cout << "Can't Initialize TTF " << TTF_GetError();
+		return 1;
+	}
 	
 	//Create Window
 	win = SDL_CreateWindow(title, 0, 0, width, height, SDL_WINDOW_SHOWN);
@@ -71,6 +76,18 @@ void GameWindow::setBackgroundColor(Uint8 nred, Uint8 ngreen, Uint8 nblue, Uint8
 	green = ngreen;
 	blue = nblue;
 	alpha = nalpha;
+}
+
+void GameWindow::drawText(const char* text, TTF_Font *font, SDL_Color color, SDL_Rect pos){
+	//TODO broken
+	if(!font){
+		std::cout << TTF_GetError() << std::endl;
+	}
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text, color);
+	SDL_Texture* Message = SDL_CreateTextureFromSurface(ren, surfaceMessage);
+	SDL_RenderCopy(ren, Message, NULL, &pos);
+	SDL_FreeSurface(surfaceMessage);
+	SDL_DestroyTexture(Message);
 }
 
 SDL_Window* GameWindow::getWindow(){

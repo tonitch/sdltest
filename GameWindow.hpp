@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 class GameWindow 
 {
@@ -30,9 +31,11 @@ class GameWindow
 		void QuitWindow();
 
 		void setBackgroundColor(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+		void drawText(const char* text, TTF_Font *font, SDL_Color color, SDL_Rect pos);
 		
 		SDL_Window* getWindow();
 		SDL_Renderer* getRenderer();
+
 
 		int getWidth();
 		int getHeight();

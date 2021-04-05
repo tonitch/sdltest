@@ -10,9 +10,8 @@ Character* ply;
 
 bool event(GameWindow* GW){
 	SDL_Event e = GW->getEvent();
-	if(e.type == SDL_KEYDOWN){
+	if(e.type == SDL_KEYDOWN | e.type == SDL_KEYUP){
 		ply->keyIO(&e);
-
 	}
 	return 0;
 }
@@ -20,9 +19,10 @@ bool event(GameWindow* GW){
 bool draw(GameWindow* GW){
 	if(drawFirstRun){
 		drawFirstRun = false;
-		ply = new Character(GW->getRenderer());
+		ply = new Character(GW->getRenderer(), "tonitch.png");
 	}
 	ply->render();
+	/* GW->drawText("test",TTF_OpenFont("FiraCode-Medium.ttf", 24), {255,0,0}, {0,0,600,100}); */
 	return 0;
 }
 
